@@ -1,0 +1,20 @@
+service: basket
+
+# Add the serverless-webpack plugin
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  baskets:
+    handler: src/main.commandHandler
+    events:
+      - http:
+          method: get
+          path: baskets
+      - http:
+          method: post
+          path: baskets/{userId}
