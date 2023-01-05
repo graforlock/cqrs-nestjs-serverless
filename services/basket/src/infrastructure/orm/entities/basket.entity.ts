@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { Collection, Entity, OneToMany, PrimaryKey, Property, Unique } from '@mikro-orm/core';
-import { BasketItem } from './basket-item.entity';
+import { BasketItemEntity } from './basket-item.entity';
 
-@Entity()
-export class Basket {
+@Entity({ tableName: 'basket' })
+export class BasketEntity {
   @PrimaryKey({ type: 'uuid' })
   public id: string = v4();
 
@@ -21,8 +21,8 @@ export class Basket {
   @Unique()
   public userId: string;
 
-  @OneToMany(() => BasketItem, (item: BasketItem) => item.basketId)
-  public items = new Collection<BasketItem>(this);
+  @OneToMany(() => BasketItemEntity, (item: BasketItemEntity) => item.basketId)
+  public items = new Collection<BasketItemEntity>(this);
 
   constructor(id: string, userId: string) {
     this.id = id;

@@ -1,9 +1,10 @@
 service: basket
 
-# Add the serverless-webpack plugin
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-dynamodb-local
+
 provider:
   name: aws
   runtime: nodejs18.x
@@ -16,5 +17,43 @@ functions:
           method: get
           path: baskets
       - http:
+          method: get
+          path: baskets/{basketId}
+      - http:
           method: post
           path: baskets/{userId}
+
+	
+custom:
+  dynamodb:
+  # If you only want to use DynamoDB Local in some stages, declare them here
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+
+resources:
+  Resources:
+    BasketTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: basket
+        KeySchema:
+        - AttributeName: basketId
+          KeyType: HASH
+        - AttributeName: part
+          KeyType: RANGE
+        AttributeDefinitions:
+        - AttributeName: basketId
+          AttributeType: S
+        - AttributeName: part
+          AttributeType: N
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

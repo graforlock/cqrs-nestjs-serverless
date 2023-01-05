@@ -1,10 +1,10 @@
 import { LoadStrategy, Options } from '@mikro-orm/core';
 
-import { BasketItem } from "./entities/basket-item.entity";
-import { Basket } from "./entities/basket.entity";
+import { BasketItemEntity } from "./entities/basket-item.entity";
+import { BasketEntity } from "./entities/basket.entity";
 
 const config: Options = {
-  entities: [Basket, BasketItem],
+  entities: [BasketEntity, BasketItemEntity],
   dbName: 'sales',
   type: 'postgresql',
   loadStrategy: LoadStrategy.JOINED

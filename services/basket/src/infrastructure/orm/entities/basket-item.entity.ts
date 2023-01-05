@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { Basket } from './basket.entity';
+import { BasketEntity } from './basket.entity';
 
-@Entity()
-export class BasketItem {
+@Entity({ tableName: 'basket_item' })
+export class BasketItemEntity {
   @PrimaryKey({ type: 'uuid' })
   public id: string = v4();
 
@@ -13,8 +13,8 @@ export class BasketItem {
   @Property({ onUpdate: () => new Date() })
   public updatedAt: Date = new Date();
 
-  @ManyToOne(() => Basket)
-  public basketId: Basket;
+  @ManyToOne(() => BasketEntity)
+  public basketId: BasketEntity;
 
   @Property()
   public price: number;

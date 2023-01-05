@@ -1,18 +1,29 @@
+import * as AWS from 'aws-sdk';
+
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import * as clc from 'cli-color';
-import { Db } from 'mongodb';
 import { GetBasketsQuery } from '../impl';
 
 @QueryHandler(GetBasketsQuery)
 export class GetBasketsHandler implements IQueryHandler<GetBasketsQuery> {
   constructor(
     @Inject('DATABASE_CONNECTION')
-    private db: Db,
+    private db: AWS.DynamoDB,
   ) {}
 
-  async execute(query: GetBasketsQuery) {
+  async execute() {
     console.log(clc.yellowBright('Async GetBasketsQuery...'));
-    return await this.db.collection('baskets').find().toArray();
+    
+    const results = await this.db.executeStatement({
+      Statement: `SELECT * FROM basket`
+    }).promise();
+
+    const items = results.Items;
+
+    console.log(clc.yellowBright('Async GetBasketsQuery...', JSON.stringify(items)));
+
+    return items.map((i) => AWS.DynamoDB.Converter.unmarshall(i))
+
   }
 }

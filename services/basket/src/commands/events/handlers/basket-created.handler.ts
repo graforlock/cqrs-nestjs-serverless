@@ -1,7 +1,7 @@
 import { IEventHandler } from '@nestjs/cqrs';
 import { EventsHandler } from '@nestjs/cqrs/dist/decorators/events-handler.decorator';
 import * as clc from 'cli-color';
-import { BasketCreatedProjectionHandler } from '../../../projections/handlers/create-basket.handler';
+import { BasketCreatedProjectionHandler } from '../../projections/handlers/create-basket.handler';
 import { BasketCreatedEvent } from '../impl/basket-created.event';
 
 @EventsHandler(BasketCreatedEvent)
