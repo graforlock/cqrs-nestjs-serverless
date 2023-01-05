@@ -12,6 +12,7 @@ npm-debug.log
 
 # dist
 .build
+.dynamodb
 
 # tests
 /test
