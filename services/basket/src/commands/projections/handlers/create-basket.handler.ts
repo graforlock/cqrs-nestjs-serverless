@@ -1,36 +1,25 @@
-import * as AWS from 'aws-sdk';
 import { Inject, Injectable } from '@nestjs/common';
 import * as clc from 'cli-color';
+import { BasketReadRepository } from '../../../infrastructure/database/repository/basket.repository';
 
 @Injectable()
 export class BasketCreatedProjectionHandler {
   constructor(
-    @Inject('DATABASE_CONNECTION')
-    private db: AWS.DynamoDB,
+    @Inject(BasketReadRepository) private basketRepository: BasketReadRepository,
   ) {}
   
   async project(
     id: string,
     userId: string,
-    items: unknown[]
+    items: object[]
   ) {
     console.log(clc.yellowBright('Async BasketCreatedProjectionHandler...'));
 
-    const result = await this.db.executeStatement({
-        Statement: `INSERT INTO basket value {'basketId':?, 'part':?, 'userId':?, 'items':? }`,
-        "Parameters": [
-          { "S": id },
-          { "N": "1" },
-          { "S": userId },
-          { "L": items }
-        ]
-      }).promise();
+    const result = await this.basketRepository.create({ id, userId, items});
 
-    const response = result.Items;
+    console.log(clc.greenBright('Async BasketCreatedProjectionHandler...', result));
 
-    console.log(clc.yellowBright('Async BasketCreatedProjectionHandler...', response));
-
-    return response;
+    return result;
   }
 }
 

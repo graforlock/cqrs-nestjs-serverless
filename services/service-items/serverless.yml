@@ -10,22 +10,18 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  baskets-command:
-    handler: src/main.commandHandler
+  service-items:
+    handler: src/main.serviceItemsHandler
     events:
       - http:
           method: post
-          path: baskets/{userId}
-  baskets-query:
-    handler: src/main.queryHandler
-    events:
+          path: service-items
+      - http:
+          method: patch
+          path: service-items/{id}
       - http:
           method: get
-          path: baskets
-      - http:
-          method: get
-          path: baskets/{basketId}
-
+          path: service-items
 
 custom:
   dynamodb:

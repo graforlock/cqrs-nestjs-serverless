@@ -6,22 +6,30 @@ import { EventHandlers } from './events/handlers';
 import { BasketRepository } from './repositories/basket.repository';
 import { CommandsController } from './commands.controller';
 import { OrmModule } from '../infrastructure/orm/orm.module';
-import { ProjectionsModule } from './projections/projections.module';
-import { BasketCreatedProjectionHandler } from './projections/handlers/create-basket.handler';
-// import { BasketCreatedProjectionHandler } from '../projections/handlers/create-basket.handler';
+import { ProjectionHandlers } from './projections/handlers';
+import { DynamooseModule } from 'nestjs-dynamoose';
+import { BasketModule } from '../infrastructure/database/database.module';
 
 @Module({
   imports: [
     CqrsModule,
     OrmModule,
-    ProjectionsModule
+    DynamooseModule.forRoot({
+      aws: {
+        region: 'localhost',
+        accessKeyId: 'access_key_id',
+        secretAccessKey: 'secret_access_key'
+      },
+      local: true
+    }),
+    BasketModule
   ],
   controllers: [CommandsController],
   providers: [
-    BasketCreatedProjectionHandler,
     BasketRepository,
     ...CommandHandlers,
-    ...EventHandlers
+    ...EventHandlers,
+    ...ProjectionHandlers
   ],
 })
 export class CommandsModule {}

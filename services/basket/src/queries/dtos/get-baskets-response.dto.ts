@@ -1,8 +1,3 @@
-export interface GetBasketsResponseDto {
-  id: string;
-  userId: string;
-  currency: string;
-  items: object[];
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { GetBasketResponseDto } from "./get-basket-response.dto";
+
+export type GetBasketsResponseDto = GetBasketResponseDto[];
